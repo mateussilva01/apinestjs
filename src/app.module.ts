@@ -8,10 +8,11 @@ import { BancoProvider } from './banco/banco.provider';
 import { FilmesModule } from './filmes/filmes.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [InfoModule, FilmesModule, ConfigModule.forRoot({ isGlobal: true }), AuthModule],
   controllers: [AppController, InfoController],
-  providers: [AppService, InfoService, BancoProvider],
+  providers: [AppService, InfoService, BancoProvider, JwtService],
 })
 export class AppModule {}

@@ -8,12 +8,12 @@ export class AuthService {
     if (!email || !senha) {
       throw new BadRequestException('Dados estão inválidos');
     }
-    const emailUsuario = 'email@gmail.com';
+    const emailUsuario = 'email@email.com';
     const senhaUsuario = 'senha';
     if (email !== emailUsuario || senha !== senhaUsuario) {
       throw new BadRequestException('Email ou senha incorretos')
     }
     const token = this.jwtService.sign({ email });
-    return token;
+    return {token};
   }
 }
