@@ -8,4 +8,9 @@ export class AuthController {
   logar(@Body() body: { email: string , senha: string }) {
     return this.authService.logar(body.email, body.senha);
   }
+
+  @Post('/cadastrar')
+  cadastrar(@Body() body: { email: string , senha: string }) {
+    return this.authService.cadastrar(body.email, body.senha);
+  }
 }
