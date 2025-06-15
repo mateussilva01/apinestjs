@@ -1,13 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { FilmesService } from './filmes.service';
-import { CreateFilmeDto } from './dto/create-filme.dto';
 import { UpdateFilmeDto } from './dto/update-filme.dto';
+import { JwtGuard } from 'src/guard/jwt.guard';
 
 @Controller('filmes')
 export class FilmesController {
   constructor(private readonly filmesService: FilmesService) {}
 
   @Post()
+  @UseGuards(JwtGuard)
   create(@Body() createFilmeDto: any) {
     console.log(createFilmeDto);
     return this.filmesService.create(createFilmeDto);
@@ -24,11 +25,13 @@ export class FilmesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtGuard)
   update(@Param('id') id: string, @Body() updateFilmeDto: UpdateFilmeDto) {
     return this.filmesService.update(id, updateFilmeDto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard)
   remove(@Param('id') id: string) {
     return this.filmesService.remove(id);
   }

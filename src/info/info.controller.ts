@@ -3,24 +3,22 @@ import { InfoService } from './info.service';
 import { JwtGuard } from 'src/guard/jwt.guard';
 
 @Controller('info')
+@UseGuards(JwtGuard)
 export class InfoController {
 
   constructor(private readonly infoService: InfoService) {}
 
   @Get('diretores')
-  @UseGuards(JwtGuard)
   pegarDiretores() {
     return this.infoService.pegarDiretores();
   }
 
   @Get('atores')
-  @UseGuards(JwtGuard)
   pegarAtores() {
     return this.infoService.pegarAtores();
   }
 
   @Get('generos')
-  @UseGuards(JwtGuard)
   pegarGeneros() {
     return this.infoService.pegarGeneros();
   }
