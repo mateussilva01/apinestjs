@@ -404,16 +404,16 @@ export class BancoProvider {
 
   private _usuarios: Usuario[] = [
     {
-      email: 'ana@mail.com',
-      senha: '$2b$05$0gYAiONNNnDq/IaJLy2vxOa5DuOBlaSWyldtGFqQWrRUb5nTQqVKq'
+      email: 'mateus@mail.com',
+      senha: '$2b$05$WzY51lG2tdf4jABUPNGMg.S1ZI4cq4XXrENM.378ZjfcQphWSJVkm'
     },
     {
-      email: 'ze@mail.com',
-      senha: '$2b$05$IyImKOE7jxfl39uFYtV9B.7.9XHrYuAy44sTeBVuav5PRGVhT3qIW'
+      email: 'rafael@mail.com',
+      senha: '$2b$05$pcSPZTbnvQn3Pcfw2DWuzO3081GH5I94s9z6fYfVbR2NZHq9yYFRq'
     },
     {
-      email: 'thais@mail.com',
-      senha: '$2b$05$IMUTHv/aj9G6GyNsNlIMq.9yPcZKEVlizW7G2G1skXXfHVnXNEZ8G'
+      email: 'jonas@mail.com',
+      senha: '$2b$05$SR.6MmNe34AYT0wVunYZ.O/g0J4XLOVoEGOaKwdM0h.idIelgdMoC'
     }
   ]
 
