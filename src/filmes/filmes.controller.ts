@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } f
 import { FilmesService } from './filmes.service';
 import { UpdateFilmeDto } from './dto/update-filme.dto';
 import { JwtGuard } from 'src/guard/jwt.guard';
+import { CreateFilmeDto } from './dto/create-filme.dto';
+import { Usuario } from 'src/decorators/usuario.decorator';
 
 @Controller('filmes')
 export class FilmesController {
@@ -9,9 +11,9 @@ export class FilmesController {
 
   @Post()
   @UseGuards(JwtGuard)
-  create(@Body() createFilmeDto: any) {
+  create(@Body() createFilmeDto: CreateFilmeDto, @Usuario() usuario: string) {
     console.log(createFilmeDto);
-    return this.filmesService.create(createFilmeDto);
+    return this.filmesService.create(createFilmeDto, usuario);
   }
 
   @Get()
@@ -26,13 +28,13 @@ export class FilmesController {
 
   @Patch(':id')
   @UseGuards(JwtGuard)
-  update(@Param('id') id: string, @Body() updateFilmeDto: UpdateFilmeDto) {
-    return this.filmesService.update(id, updateFilmeDto);
+  update(@Param('id') id: string, @Body() updateFilmeDto: UpdateFilmeDto, @Usuario() usuario: string) {
+    return this.filmesService.update(id, updateFilmeDto, usuario);
   }
 
   @Delete(':id')
   @UseGuards(JwtGuard)
-  remove(@Param('id') id: string) {
-    return this.filmesService.remove(id);
+  remove(@Param('id') id: string, @Usuario() usuario: string) {
+    return this.filmesService.remove(id, usuario);
   }
 }

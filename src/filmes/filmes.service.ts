@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFilmeDto } from './dto/create-filme.dto';
 import { UpdateFilmeDto } from './dto/update-filme.dto';
 import { BancoProvider } from 'src/banco/banco.provider';
@@ -17,7 +17,7 @@ export class FilmesService {
     return copia;
   }
 
-  create(createFilmeDto: CreateFilmeDto) {
+  create(createFilmeDto: CreateFilmeDto, emailUsuario: string) {
     if (!(
       createFilmeDto.ano && createFilmeDto.diretor &&
       createFilmeDto.elenco && createFilmeDto.genero &&
@@ -26,7 +26,7 @@ export class FilmesService {
       throw new BadRequestException('Informações inválidas')
     }
     const idAleatorio = (Math.random() * 100) | 0;
-    const filme = { ...createFilmeDto, id: `FIL${idAleatorio}`};
+    const filme = { ...createFilmeDto, id: `FIL${idAleatorio}`, criadoPor: emailUsuario};
     this.banco.filmes.push(filme);
     return filme;
   }
@@ -47,20 +47,26 @@ export class FilmesService {
     return this.limparCampos(filme, ignorar);
   }
 
-  update(id: string, updateFilmeDto: UpdateFilmeDto) {
+  update(id: string, updateFilmeDto: UpdateFilmeDto, usuario: string) {
     const indice = this.banco.filmes.findIndex((filme: Filme) => filme.id === id);
     if (indice === -1) {
       throw new NotFoundException("Filme não foi encontrado");
+    }
+    if (usuario !== this.banco.filmes[indice].criadoPor) {
+      throw new ForbiddenException();
     }
     const filmeAtualizado = { ...this.banco.filmes[indice], updateFilmeDto };
     this.banco.filmes[indice] = filmeAtualizado;
     return filmeAtualizado;
   }
 
-  remove(id: string) {
+  remove(id: string, usuario: string) {
     const indice = this.banco.filmes.findIndex((filme: Filme) => filme.id === id);
     if (indice === -1) {
       throw new NotFoundException("Filme não foi encontrado");
+    }
+    if (usuario !== this.banco.filmes[indice].criadoPor) {
+      throw new ForbiddenException();
     }
     const filmeRemovido = this.banco.filmes.splice(indice, 1);
     return filmeRemovido;

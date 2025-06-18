@@ -24,6 +24,7 @@ export class JwtGuard implements CanActivate {
       if (payload.exp < dataAtual) {
         throw new Error();
       }
+      req.email = payload.email;
       console.log(payload);
     } catch (e: unknown) {
         return false;
