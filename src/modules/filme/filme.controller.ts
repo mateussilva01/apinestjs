@@ -7,34 +7,35 @@ import { Usuario } from 'src/common/decorators/usuario.decorator';
 
 @Controller('filme')
 export class FilmeController {
-  constructor(private readonly filmesService: FilmeService) {}
+
+  constructor(private readonly filmeService: FilmeService) {}
 
   @Post()
   @UseGuards(JwtGuard)
   create(@Body() createFilmeDto: CreateFilmeDto, @Usuario() usuario: string) {
     console.log(createFilmeDto);
-    return this.filmesService.create(createFilmeDto, usuario);
+    return this.filmeService.create(createFilmeDto, usuario);
   }
 
   @Get()
   findAll(@Query('ignorar') ignorar: string) {
-    return this.filmesService.findAll(ignorar);
+    return this.filmeService.findAll(ignorar);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string, @Query('ignorar') ignorar: string) {
-    return this.filmesService.findOne(id, ignorar);
+    return this.filmeService.findOne(id, ignorar);
   }
 
   @Patch(':id')
   @UseGuards(JwtGuard)
   update(@Param('id') id: string, @Body() updateFilmeDto: UpdateFilmeDto, @Usuario() usuario: string) {
-    return this.filmesService.update(id, updateFilmeDto, usuario);
+    return this.filmeService.update(id, updateFilmeDto, usuario);
   }
 
   @Delete(':id')
   @UseGuards(JwtGuard)
   remove(@Param('id') id: string, @Usuario() usuario: string) {
-    return this.filmesService.remove(id, usuario);
+    return this.filmeService.remove(id, usuario);
   }
 }

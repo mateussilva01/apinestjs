@@ -6,4 +6,4 @@ import { JwtService } from '@nestjs/jwt';
 @Module({
   providers: [InformacaoService, BancoProvider, JwtService]
 })
-export class InfoModule {}
+export class InformacaoModule {}
