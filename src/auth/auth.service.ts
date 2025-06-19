@@ -1,6 +1,6 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { BancoProvider } from 'src/banco/banco.provider';
+import { BancoProvider } from 'src/database/banco.provider';
 import { Usuario } from 'src/model';
 import * as bcrypt from 'bcrypt';
 

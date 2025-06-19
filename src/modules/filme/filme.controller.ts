@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { FilmesService } from './filmes.service';
+import { FilmeService } from './filme.service';
 import { UpdateFilmeDto } from './dto/update-filme.dto';
-import { JwtGuard } from 'src/guard/jwt.guard';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { CreateFilmeDto } from './dto/create-filme.dto';
-import { Usuario } from 'src/decorators/usuario.decorator';
+import { Usuario } from 'src/common/decorators/usuario.decorator';
 
-@Controller('filmes')
-export class FilmesController {
-  constructor(private readonly filmesService: FilmesService) {}
+@Controller('filme')
+export class FilmeController {
+  constructor(private readonly filmesService: FilmeService) {}
 
   @Post()
   @UseGuards(JwtGuard)

@@ -1,6 +1,6 @@
-import { Type } from "class-transformer";
-import { IsArray, IsInt, IsNotEmpty, IsString, ValidateNested } from "class-validator";
-import { Ator, Diretor, Genero } from "src/model";
+import { Type } from 'class-transformer';
+import { IsArray, IsInt, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { Ator, Diretor, Genero } from 'src/model';
 
 export class CreateFilmeDto {
   @IsString()

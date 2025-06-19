@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { BancoProvider } from 'src/banco/banco.provider';
+import { BancoProvider } from 'src/database/banco.provider';
 import { Ator, Filme, Genero } from 'src/model';
 
 @Injectable()
-export class InfoService {
+export class InformacaoService {
 
   constructor(private banco: BancoProvider) {}
 

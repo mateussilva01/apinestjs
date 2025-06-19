@@ -1,6 +1,4 @@
-import { Ator } from './elenco';
-import { Diretor } from './diretor';
-import { Genero } from './genero';
+import { Ator, Diretor, Genero } from 'src/model';
 
 export interface Filme {
   id: string;

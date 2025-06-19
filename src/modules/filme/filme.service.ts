@@ -1,11 +1,11 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFilmeDto } from './dto/create-filme.dto';
 import { UpdateFilmeDto } from './dto/update-filme.dto';
-import { BancoProvider } from 'src/banco/banco.provider';
+import { BancoProvider } from 'src/database/banco.provider';
 import { Filme } from 'src/model';
 
 @Injectable()
-export class FilmesService {
+export class FilmeService {
   constructor(private banco: BancoProvider) {}
 
   private limparCampos(filme: Filme, ignorar: string | undefined) {
@@ -50,7 +50,7 @@ export class FilmesService {
   update(id: string, updateFilmeDto: UpdateFilmeDto, usuario: string) {
     const indice = this.banco.filmes.findIndex((filme: Filme) => filme.id === id);
     if (indice === -1) {
-      throw new NotFoundException("Filme não foi encontrado");
+      throw new NotFoundException('Filme não foi encontrado');
     }
     if (usuario !== this.banco.filmes[indice].criadoPor) {
       throw new ForbiddenException();
@@ -63,7 +63,7 @@ export class FilmesService {
   remove(id: string, usuario: string) {
     const indice = this.banco.filmes.findIndex((filme: Filme) => filme.id === id);
     if (indice === -1) {
-      throw new NotFoundException("Filme não foi encontrado");
+      throw new NotFoundException('Filme não foi encontrado');
     }
     if (usuario !== this.banco.filmes[indice].criadoPor) {
       throw new ForbiddenException();
