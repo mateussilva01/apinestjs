@@ -11,7 +11,7 @@ import { BancoProvider } from 'src/banco/banco.provider';
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1m' }
+        signOptions: { expiresIn: '1h' }
       }),
       inject: [ConfigService]
     })
