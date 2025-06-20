@@ -11,9 +11,10 @@ import { AuthModule } from './auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
 import { DiretorModule } from './modules/diretor/diretor.module';
 import { DiretorService } from './modules/diretor/diretor.service';
+import { GeneroModule } from './modules/genero/genero.module';
 
 @Module({
-  imports: [InformacaoModule, FilmeModule, DiretorModule, ConfigModule.forRoot({ isGlobal: true }), AuthModule],
+  imports: [InformacaoModule, FilmeModule, DiretorModule, GeneroModule, ConfigModule.forRoot({ isGlobal: true }), AuthModule],
   controllers: [AppController, InformacaoController],
   providers: [AppService, InformacaoService, DiretorService, BancoProvider, JwtService],
 })

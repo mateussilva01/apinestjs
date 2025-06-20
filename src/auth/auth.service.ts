@@ -7,10 +7,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   
-  constructor(
-    private jwtService: JwtService,
-    private banco: BancoProvider
-  ) {}
+  constructor(private jwtService: JwtService, private banco: BancoProvider) {}
   
   logar(email: string, senha: string) {
     if (!email || !senha) {
