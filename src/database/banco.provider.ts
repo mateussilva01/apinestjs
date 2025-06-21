@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Diretor, Filme, Genero, Usuario } from 'src/model';
+import { Ator, Diretor, Filme, Genero, Usuario } from 'src/model';
 
 @Injectable()
 export class BancoProvider {
@@ -427,6 +427,27 @@ export class BancoProvider {
 
   get generos() {
     return this._generos
+  }
+
+  private _atores: Ator[] = [
+    {
+      id: "ATR001",
+      nome: "Alexandre Rodrigues",
+      nascimento: "1983-05-21",
+      papel: "Buscapé",
+      nacionalidade: "Brasileiro",
+    },
+    {
+      id: "ATR002",
+      nome: "Leandro Firmino",
+      papel: "Zé Pequeno",
+      nascimento: "1978-06-23",
+      nacionalidade: "Brasileiro",
+    },
+  ]
+
+  get atores() {
+    return this._atores
   }
 
   private _usuarios: Usuario[] = [

@@ -4,5 +4,4 @@ export interface Ator {
   nascimento: string;
   nacionalidade: string;
   papel: string;
-  criadoPor?: string;
 }
