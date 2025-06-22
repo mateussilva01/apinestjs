@@ -1,8 +1,8 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateFilmeDto } from './dto/create-filme.dto';
-import { UpdateFilmeDto } from './dto/update-filme.dto';
 import { BancoProvider } from 'src/database/banco.provider';
 import { Filme } from 'src/model';
+import { CreateFilmeDto } from './model/dto/create-filme.dto';
+import { UpdateFilmeDto } from './model/dto/update-filme.dto';
 
 @Injectable()
 export class FilmeService {

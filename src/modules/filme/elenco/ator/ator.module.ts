@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AtorService } from './ator.service';
-import { AtorController } from './ator.controller';
-import { BancoProvider } from 'src/database/banco.provider';
 import { JwtService } from '@nestjs/jwt';
+import { BancoProvider } from 'src/database/banco.provider';
+import { AtorController } from './ator.controller';
+import { AtorService } from './ator.service';
 
 @Module({
   controllers: [AtorController],

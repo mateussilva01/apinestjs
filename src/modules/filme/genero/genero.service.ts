@@ -1,8 +1,8 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateGeneroDto } from './dto/create-genero.dto';
-import { UpdateGeneroDto } from './dto/update-genero.dto';
 import { BancoProvider } from 'src/database/banco.provider';
 import { Genero } from 'src/model';
+import { CreateGeneroDto } from './model/dto/create-genero.dto';
+import { UpdateGeneroDto } from './model/dto/update-genero.dto';
 
 @Injectable()
 export class GeneroService {

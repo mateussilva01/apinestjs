@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { FilmeService } from './filme.service';
-import { UpdateFilmeDto } from './dto/update-filme.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { CreateFilmeDto } from './dto/create-filme.dto';
 import { Usuario } from 'src/common/decorators/usuario.decorator';
+import { UpdateFilmeDto } from './model/dto/update-filme.dto';
+import { CreateFilmeDto } from './model/dto/create-filme.dto';
+import { FilmeService } from './filme.service';
 
 @Controller('filme')
 export class FilmeController {

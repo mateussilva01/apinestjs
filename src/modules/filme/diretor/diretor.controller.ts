@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { DiretorService } from './diretor.service';
-import { UpdateDiretorDto } from './dto/update-diretor.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { CreateDiretorDto } from './dto/create-diretor.dto';
 import { Usuario } from 'src/common/decorators/usuario.decorator';
+import { CreateDiretorDto } from './model/dto/create-diretor.dto';
+import { UpdateDiretorDto } from './model/dto/update-diretor.dto';
+import { DiretorService } from './diretor.service';
 
 @Controller('diretor')
 export class DiretorController {

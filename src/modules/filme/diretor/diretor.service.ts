@@ -1,8 +1,8 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateDiretorDto } from './dto/create-diretor.dto';
-import { UpdateDiretorDto } from './dto/update-diretor.dto';
 import { BancoProvider } from 'src/database/banco.provider';
 import { Diretor } from 'src/model';
+import { CreateDiretorDto } from './model/dto/create-diretor.dto';
+import { UpdateDiretorDto } from './model/dto/update-diretor.dto';
 
 @Injectable()
 export class DiretorService {

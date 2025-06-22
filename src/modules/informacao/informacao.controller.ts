@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { InformacaoService } from './informacao.service';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
+import { InformacaoService } from './informacao.service';
 
 @Controller('informacao')
 @UseGuards(JwtGuard)

@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { AtorService } from './ator.service';
-import { UpdateAtorDto } from './dto/update-ator.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { CreateAtorDto } from './dto/create-ator.dto';
 import { Usuario } from 'src/common/decorators/usuario.decorator';
+import { CreateAtorDto } from './model/dto/create-ator.dto';
+import { UpdateAtorDto } from './model/dto/update-ator.dto';
+import { AtorService } from './ator.service';
 
 @Controller('ator')
 export class AtorController {

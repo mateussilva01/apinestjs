@@ -1,8 +1,8 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateAtorDto } from './dto/create-ator.dto';
-import { UpdateAtorDto } from './dto/update-ator.dto';
 import { BancoProvider } from 'src/database/banco.provider';
 import { Ator } from 'src/model';
+import { CreateAtorDto } from './model/dto/create-ator.dto';
+import { UpdateAtorDto } from './model/dto/update-ator.dto';
 
 @Injectable()
 export class AtorService {

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { FilmeService } from './filme.service';
-import { FilmeController } from './filme.controller';
-import { BancoProvider } from 'src/database/banco.provider';
 import { JwtService } from '@nestjs/jwt';
+import { BancoProvider } from 'src/database/banco.provider';
+import { FilmeController } from './filme.controller';
+import { FilmeService } from './filme.service';
 
 @Module({
   controllers: [FilmeController],

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { GeneroService } from './genero.service';
-import { GeneroController } from './genero.controller';
-import { BancoProvider } from 'src/database/banco.provider';
 import { JwtService } from '@nestjs/jwt';
+import { BancoProvider } from 'src/database/banco.provider';
+import { GeneroController } from './genero.controller';
+import { GeneroService } from './genero.service';
 
 @Module({
   controllers: [GeneroController],

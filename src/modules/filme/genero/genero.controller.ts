@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { GeneroService } from './genero.service';
-import { UpdateGeneroDto } from './dto/update-genero.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { CreateGeneroDto } from './dto/create-genero.dto';
 import { Usuario } from 'src/common/decorators/usuario.decorator';
+import { CreateGeneroDto } from './model/dto/create-genero.dto';
+import { UpdateGeneroDto } from './model/dto/update-genero.dto';
+import { GeneroService } from './genero.service';
 
 @Controller('genero')
 export class GeneroController {
