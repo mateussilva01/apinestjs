@@ -12,6 +12,7 @@ import { GeneroModule } from './modules/filme/genero/genero.module';
 import { InformacaoModule } from './modules/informacao/informacao.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsuarioModule } from './modules/credencial/usuario/usuario.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AppService } from './app.service';
     GeneroModule,
     AtorModule, 
     InformacaoModule,
+    UsuarioModule
   ],
   controllers: [AppController],
   providers: [AppService, BancoProvider],
