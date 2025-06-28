@@ -7,7 +7,7 @@ export class Diretor {
   @IsNotEmpty()
   @IsUUID()
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   @Column()
