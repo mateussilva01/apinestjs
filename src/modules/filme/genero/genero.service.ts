@@ -1,12 +1,17 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { BancoProvider } from 'src/database/banco.provider';
-import { Genero } from 'src/model';
 import { CreateGeneroDto } from './model/dto/create-genero.dto';
 import { UpdateGeneroDto } from './model/dto/update-genero.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Genero } from './model/genero.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class GeneroService {
-  constructor(private banco: BancoProvider) {}
+  constructor(
+    @InjectRepository(Genero)
+    private generoRepository: Repository<Genero>
+  ) {}
 
   private limparCampos(genero: Genero, ignorar: string | undefined) {
     const camposParaIgnora = ignorar ? ignorar.split(',') : [];
@@ -17,53 +22,24 @@ export class GeneroService {
     return copia;
   }
 
-  create(createGeneroDto: CreateGeneroDto, emailUsuario: string) {
-    if (!createGeneroDto.nome) {
-      throw new BadRequestException('Informações inválidas')
-    }
-    const idAleatorio = (Math.random() * 100) | 0;
-    const genero = { ...createGeneroDto, id: `GEN${idAleatorio}`, criadoPor: emailUsuario};
-    console.log(genero);
-    this.banco.generos.push(genero);
-    return genero;
+  create(createGeneroDto: CreateGeneroDto) {
+    return this.generoRepository.save(createGeneroDto);
   }
 
-  findAll(ignorar: string) {
-    return this.banco.generos.map((genero: Genero) => {
-      return this.limparCampos(genero, ignorar);
-    });
+  findAll() {
+    return this.generoRepository.find();
   }
 
-  findOne(id: string, ignorar: string) {
-    const genero = this.banco.generos.find((genero: Genero) => genero.id === id);
-    if (!genero) {
-      throw new NotFoundException('Não encontrado');
-    }
-    return this.limparCampos(genero, ignorar);
+  findOne(id: string) {
+    return this.generoRepository.findOneBy({ id });
   }
 
-  update(id: string, updateGeneroDto: UpdateGeneroDto, usuario: string) {
-    const indice = this.banco.generos.findIndex((genero: Genero) => genero.id === id);
-    if (indice === -1) {
-      throw new NotFoundException('Gênero não foi encontrado');
-    }
-    if (usuario !== this.banco.generos[indice].criadoPor) {
-      throw new ForbiddenException();
-    }
-    const generoAtualizado = { ...this.banco.generos[indice], updateGeneroDto };
-    this.banco.generos[indice] = generoAtualizado;
-    return generoAtualizado;
+  update(id: string, updateGeneroDto: UpdateGeneroDto) {
+    return this.generoRepository.update(id, updateGeneroDto);
   }
 
-  remove(id: string, usuario: string) {
-    const indice = this.banco.generos.findIndex((genero: Genero) => genero.id === id);
-    if (indice === -1) {
-      throw new NotFoundException(`Gênero com id '${id}' não foi encontrado`);
-    }
-    if (usuario !== this.banco.generos[indice].criadoPor) {
-      throw new ForbiddenException();
-    }
-    const generoRemovido = this.banco.generos.splice(indice, 1);
-    return generoRemovido;
+  remove(id: string) {
+    return this.generoRepository.delete(id);
   }
+
 }

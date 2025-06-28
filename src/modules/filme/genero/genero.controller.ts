@@ -1,41 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param, Delete, Patch } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { Usuario } from 'src/common/decorators/usuario.decorator';
 import { CreateGeneroDto } from './model/dto/create-genero.dto';
-import { UpdateGeneroDto } from './model/dto/update-genero.dto';
 import { GeneroService } from './genero.service';
+import { UpdateGeneroDto } from './model/dto/update-genero.dto';
 
 @Controller('genero')
+@UseGuards(JwtGuard)
 export class GeneroController {
 
   constructor(private readonly generoService: GeneroService) {}
 
   @Post()
-  @UseGuards(JwtGuard)
-  create(@Body() createGeneroDto: CreateGeneroDto, @Usuario() usuario: string) {
+  create(@Body() createGeneroDto: CreateGeneroDto) {
     console.log(createGeneroDto);
-    return this.generoService.create(createGeneroDto, usuario);
+    return this.generoService.create(createGeneroDto);
   }
 
   @Get()
-  findAll(@Query('ignorar') ignorar: string) {
-    return this.generoService.findAll(ignorar);
+  findAll() {
+    return this.generoService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Query('ignorar') ignorar: string) {
-    return this.generoService.findOne(id, ignorar);
+  findOne(@Param('id') id: string) {
+    return this.generoService.findOne(id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtGuard)
-  update(@Param('id') id: string, @Body() updateGeneroDto: UpdateGeneroDto, @Usuario() usuario: string) {
-    return this.generoService.update(id, updateGeneroDto, usuario);
+  update(@Param('id') id: string, @Body() updateGeneroDto: UpdateGeneroDto) {
+    return this.generoService.update(id, updateGeneroDto);
   }
 
   @Delete(':id')
-  @UseGuards(JwtGuard)
-  remove(@Param('id') id: string, @Usuario() usuario: string) {
-    return this.generoService.remove(id, usuario);
+  remove(@Param('id') id: string) {
+    return this.generoService.remove(id);
   }
+
 }

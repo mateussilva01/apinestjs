@@ -7,7 +7,7 @@ export class Genero {
   @IsNotEmpty()
   @IsUUID()
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
   
   @IsNotEmpty()
   @Column()
