@@ -1,38 +1,45 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { BancoProvider } from 'src/database/banco.provider';
-import { Usuario } from 'src/model';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+import { Usuario } from 'src/modules/credencial/usuario/model/usuario.entity';
 
 @Injectable()
 export class AuthService {
-  
-  constructor(private jwtService: JwtService, private banco: BancoProvider) {}
-  
-  logar(email: string, senha: string) {
-    if (!email || !senha) {
-      throw new BadRequestException('Dados estão inválidos');
+
+  constructor(
+    @InjectRepository(Usuario) 
+    private repository: Repository<Usuario>,
+    private jwtService: JwtService
+  ) {}
+
+  async cadastrar(nome: string, email: string, senha: string) {
+    const usuario = await this.repository.findOneBy({ email });
+    if (usuario) {
+      throw new BadRequestException('Usuário já existe');
     }
-    const usuario: Usuario | undefined = this.banco.usuarios.find(usuario => usuario.email === email);
-    if (!usuario || !bcrypt.compareSync(senha, usuario.senha)) {
-      throw new BadRequestException('Email ou senha incorretos')
-    }
-    const token = this.jwtService.sign({ email });
-    return {token};
+    const hashedPassword = await bcrypt.hash(senha, 10);
+    const novoUsuario = this.repository.create({
+      nome,
+      email,
+      senha: hashedPassword,
+    });
+    await this.repository.save(novoUsuario);
+    return { message: `Usuário ${novoUsuario.nome} registrado com sucesso` };
   }
 
-  cadastrar(email: string, senha: string) {
-    if (!email || !senha) {
-      throw new BadRequestException('Dados estão inválidos');
+  async login(email: string, password: string) {
+    const usuario = await this.repository.findOneBy({ email });
+    if (!usuario) {
+      throw new BadRequestException('Credenciais inválidas');
     }
-    const usuario: Usuario | undefined = this.banco.usuarios.find(usuario => usuario.email === email);
-    if (usuario) {
-      throw new HttpException('Usuário já cadastrado', HttpStatus.CONFLICT);
+    const isPasswordValid = await bcrypt.compare(password, usuario.senha);
+    if (!isPasswordValid) {
+      throw new BadRequestException('Credenciais inválidas');
     }
-    const novoUsuario = { email, senha: bcrypt.hashSync(senha, 5) };
-    console.log(novoUsuario);
-    this.banco.usuarios.push(novoUsuario);
-    return { mensagem: `Usuário ${novoUsuario.email} já foi cadastrado`}
+    const token = this.jwtService.sign({ id: usuario.id, email: usuario.email });
+    return { mensagem: `Usuário ${usuario.nome} já foi cadastrado`, token };
   }
 
 }
