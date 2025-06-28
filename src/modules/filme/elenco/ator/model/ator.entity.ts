@@ -1,7 +1,31 @@
-export interface Ator {
+import { IsNotEmpty, IsUUID } from "class-validator";
+import { FilmeAtor } from "src/modules/filme/model/filme.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
+export class Ator {
+  
+  @IsNotEmpty()
+  @IsUUID()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
+  
+  @IsNotEmpty()
+  @Column()
   nome: string;
-  nascimento: string;
+
+  @IsNotEmpty()
+  @Column({ type: 'timestamptz' })
+  nascimento: Date;
+  
+  @IsNotEmpty()
+  @Column()
   nacionalidade: string;
+  
+  @IsNotEmpty()
+  @Column()
   papel: string;
+
+  @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.ator)
+  filmes: FilmeAtor[];
 }
