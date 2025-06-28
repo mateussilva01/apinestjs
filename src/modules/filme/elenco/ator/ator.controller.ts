@@ -1,41 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { Usuario } from 'src/common/decorators/usuario.decorator';
 import { CreateAtorDto } from './model/dto/create-ator.dto';
 import { UpdateAtorDto } from './model/dto/update-ator.dto';
 import { AtorService } from './ator.service';
 
 @Controller('ator')
+@UseGuards(JwtGuard)
 export class AtorController {
 
   constructor(private readonly atorService: AtorService) {}
 
   @Post()
-  @UseGuards(JwtGuard)
-  create(@Body() createAtorDto: CreateAtorDto, @Usuario() usuario: string) {
+  create(@Body() createAtorDto: CreateAtorDto) {
     console.log(createAtorDto);
-    return this.atorService.create(createAtorDto, usuario);
+    return this.atorService.create(createAtorDto);
   }
 
   @Get()
-  findAll(@Query('ignorar') ignorar: string) {
-    return this.atorService.findAll(ignorar);
+  findAll() {
+    return this.atorService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Query('ignorar') ignorar: string) {
-    return this.atorService.findOne(id, ignorar);
+  findOne(@Param('id') id: string) {
+    return this.atorService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(JwtGuard)
-  update(@Param('id') id: string, @Body() updateAtorDto: UpdateAtorDto, @Usuario() usuario: string) {
-    return this.atorService.update(id, updateAtorDto, usuario);
+  update(@Param('id') id: string, @Body() updateAtorDto: UpdateAtorDto) {
+    return this.atorService.update(id, updateAtorDto);
   }
 
   @Delete(':id')
-  @UseGuards(JwtGuard)
-  remove(@Param('id') id: string, @Usuario() usuario: string) {
-    return this.atorService.remove(id, usuario);
+  remove(@Param('id') id: string) {
+    return this.atorService.remove(id);
   }
+
 }

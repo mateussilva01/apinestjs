@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsUUID } from "class-validator";
-import { FilmeAtor } from "src/modules/filme/model/filme.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { IsNotEmpty, IsUUID } from 'class-validator';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { FilmeAtor } from 'src/modules/filme/model/filme.entity';
 
 @Entity()
 export class Ator {

@@ -1,8 +1,8 @@
 import { Controller, Post, Body, UseGuards, Get, Param, Delete, Patch } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { CreateGeneroDto } from './model/dto/create-genero.dto';
-import { GeneroService } from './genero.service';
 import { UpdateGeneroDto } from './model/dto/update-genero.dto';
+import { GeneroService } from './genero.service';
 
 @Controller('genero')
 @UseGuards(JwtGuard)
