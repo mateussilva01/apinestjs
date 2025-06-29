@@ -27,14 +27,14 @@ export class DiretorController {
     return this.diretorService.findOne(id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.diretorService.remove(id);
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDiretorDto: UpdateDiretorDto) {
     return this.diretorService.update(id, updateDiretorDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.diretorService.remove(id);
   }
 
 }

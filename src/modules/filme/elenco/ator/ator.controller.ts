@@ -26,15 +26,14 @@ export class AtorController {
     return this.atorService.findOne(id);
   }
 
-  @Patch(':id')
-  @UseGuards(JwtGuard)
-  update(@Param('id') id: string, @Body() updateAtorDto: UpdateAtorDto) {
-    return this.atorService.update(id, updateAtorDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.atorService.remove(id);
+  }
+  
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateAtorDto: UpdateAtorDto) {
+    return this.atorService.update(id, updateAtorDto);
   }
 
 }

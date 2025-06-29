@@ -23,13 +23,13 @@ export class DiretorService {
   findOne(id: string) {
     return this.diretorRepository.findOneBy({ id });
   }
+  
+  update(id: string, updateDiretorDto: UpdateDiretorDto) {
+    return this.diretorRepository.update(id, updateDiretorDto);
+  }
 
   remove(id: string) {
     return this.diretorRepository.delete(id);
-  }
-
-  update(id: string, updateDiretorDto: UpdateDiretorDto) {
-    return this.diretorRepository.update(id, updateDiretorDto);
   }
 
 }
