@@ -9,7 +9,6 @@ import { FilmeModule } from './modules/filme/filme.module';
 import { DiretorModule } from './modules/filme/diretor/diretor.module';
 import { AtorModule } from './modules/filme/elenco/ator/ator.module';
 import { GeneroModule } from './modules/filme/genero/genero.module';
-import { InformacaoModule } from './modules/informacao/informacao.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsuarioModule } from './modules/credencial/usuario/usuario.module';
@@ -27,7 +26,6 @@ import { UsuarioModule } from './modules/credencial/usuario/usuario.module';
     DiretorModule,
     GeneroModule,
     AtorModule, 
-    InformacaoModule,
     UsuarioModule
   ],
   controllers: [AppController],
