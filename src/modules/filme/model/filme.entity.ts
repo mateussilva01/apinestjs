@@ -28,8 +28,8 @@ export class Filme {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.filme, { cascade: true })
-  generos: FilmeAtor[];
+  @OneToMany(() => FilmeGenero, filmeGenero => filmeGenero.filme, { cascade: true })
+  generos: FilmeGenero[];
 
   @IsOptional()
   @IsArray()
@@ -49,7 +49,7 @@ export class FilmeGenero {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Filme, filme => filme.atores)
+  @ManyToOne(() => Filme, filme => filme.generos)
   filme: Filme;
 
   @ManyToOne(() => Genero, genero => genero.id)

@@ -1,74 +1,70 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { BancoProvider } from 'src/database/banco.provider';
-import { Filme } from 'src/model';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateFilmeDto } from './model/dto/create-filme.dto';
 import { UpdateFilmeDto } from './model/dto/update-filme.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Filme, FilmeAtor, FilmeGenero } from './model/filme.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FilmeService {
-  constructor(private banco: BancoProvider) {}
+  constructor(
+    @InjectRepository(Filme)
+    private filmeRepository: Repository<Filme>,
+    @InjectRepository(FilmeGenero)
+    private filmeGeneroRepository: Repository<FilmeGenero>,
+    @InjectRepository(FilmeAtor)
+    private filmeAtorRepository: Repository<FilmeAtor>
+  ) {}
 
-  private limparCampos(filme: Filme, ignorar: string | undefined) {
-    const camposParaIgnora = ignorar ? ignorar.split(',') : [];
-    const copia = { ...filme };
-    camposParaIgnora.forEach((campo: string) => {
-      delete copia[campo as keyof Filme];
-    })
-    return copia;
-  }
-
-  create(createFilmeDto: CreateFilmeDto, emailUsuario: string) {
-    if (!(
-      createFilmeDto.ano && createFilmeDto.diretor &&
-      createFilmeDto.elenco && createFilmeDto.genero &&
-      createFilmeDto.sinopse && createFilmeDto.titulo
-    )) {
+  async create(createFilmeDto: CreateFilmeDto) {
+    if (!createFilmeDto) {
       throw new BadRequestException('Informações inválidas')
     }
-    const idAleatorio = (Math.random() * 100) | 0;
-    const filme = { ...createFilmeDto, id: `FIL${idAleatorio}`, criadoPor: emailUsuario};
-    this.banco.filmes.push(filme);
+    const filme = await this.filmeRepository.save({
+      titulo: createFilmeDto.titulo,
+      ano: createFilmeDto.ano,
+      sinopse: createFilmeDto.sinopse,
+      diretor: { id: createFilmeDto.diretor.id }
+    });
+    if (createFilmeDto.generos?.length) {
+      for (const genero of createFilmeDto.generos) {
+        if (!genero?.id) {
+          throw new BadRequestException('ID do gênero é obrigatório');
+        }
+        await this.filmeGeneroRepository.save({
+          filme: { id: filme.id },
+          genero: { id: genero.id }
+        });
+      }
+    }
+    if (createFilmeDto.atores?.length) {
+      for (const ator of createFilmeDto.atores) {
+        if (!ator?.id) {
+          throw new BadRequestException('ID do ator é obrigatório');
+        }
+        await this.filmeAtorRepository.save({
+          filme: { id: filme.id },
+          ator: { id: ator.id }
+        });
+      }
+    }
     return filme;
   }
 
-  findAll(ignorar: string) {
-    return this.banco.filmes.map((filme: Filme) => {
-      return this.limparCampos(filme, ignorar);
-    });
+  findAll() {
+    return this.filmeRepository.find()
   }
 
-  findOne(id: string, ignorar: string) {
-    const filme = this.banco.filmes.find((filme: Filme) => filme.id === id);
-    if (!filme) {
-      throw new NotFoundException('Não encontrado');
-      //throw new NotFoundException();
-      //throw new HttpException('Não encontrado', HttpStatus.NOT_FOUND);
-    }
-    return this.limparCampos(filme, ignorar);
+  findOne(id: string) {
+    return this.filmeRepository.findOneBy({ id });
   }
 
-  update(id: string, updateFilmeDto: UpdateFilmeDto, usuario: string) {
-    const indice = this.banco.filmes.findIndex((filme: Filme) => filme.id === id);
-    if (indice === -1) {
-      throw new NotFoundException('Filme não foi encontrado');
-    }
-    if (usuario !== this.banco.filmes[indice].criadoPor) {
-      throw new ForbiddenException();
-    }
-    const filmeAtualizado = { ...this.banco.filmes[indice], updateFilmeDto };
-    this.banco.filmes[indice] = filmeAtualizado;
-    return filmeAtualizado;
+  update(id: string, updateFilmeDto: UpdateFilmeDto) {
+    return this.filmeRepository.update(id, updateFilmeDto);
   }
 
-  remove(id: string, usuario: string) {
-    const indice = this.banco.filmes.findIndex((filme: Filme) => filme.id === id);
-    if (indice === -1) {
-      throw new NotFoundException('Filme não foi encontrado');
-    }
-    if (usuario !== this.banco.filmes[indice].criadoPor) {
-      throw new ForbiddenException();
-    }
-    const filmeRemovido = this.banco.filmes.splice(indice, 1);
-    return filmeRemovido;
+  remove(id: string) {
+    return this.filmeRepository.delete(id);
   }
+
 }
