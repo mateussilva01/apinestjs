@@ -9,8 +9,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/cadastrar')
-  cadastrar(@Body('username') username: string, @Email() email: string, @Senha() senha: string) {
-    return this.authService.cadastrar(username, email, senha);
+  cadastrar(@Body('nome') nome: string, @Email() email: string, @Senha() senha: string) {
+    return this.authService.cadastrar(nome, email, senha);
   }
 
   @Post('/login')
