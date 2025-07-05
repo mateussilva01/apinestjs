@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Usuario {
@@ -20,4 +20,7 @@ export class Usuario {
   @IsNotEmpty()
   @Column()
   senha: string;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

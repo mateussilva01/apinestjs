@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from './model/usuario.entity';
@@ -15,16 +15,25 @@ export class UsuarioService {
     return this.usuarioRepository.find();
   }
 
-  findOne(id: string) {
-    return this.usuarioRepository.findOneBy({ id });
+  async findOne(id: string) {
+   try {
+      const usuario = await this.usuarioRepository.findOneOrFail({ where: { id } });
+      return usuario;
+    } catch (error) {
+      throw new NotFoundException(`Usuário com id ${id} não encontrado`);
+    }
   }
 
   update(id: string, updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuarioRepository.update(id, updateUsuarioDto);
   }
 
-  remove(id: string) {
-    return this.usuarioRepository.delete(id);
+  async remove(id: string) {
+    const usuario = await this.usuarioRepository.findOneBy({ id });
+    if (!usuario) {
+      throw new NotFoundException(`Usuário com id ${id} não encontrado`);
+    }
+    await this.usuarioRepository.softRemove(usuario);
   }
 
 }
