@@ -55,8 +55,21 @@ export class FilmeService {
     return this.filmeRepository.find()
   }
 
-  findOne(id: string) {
-    return this.filmeRepository.findOneBy({ id });
+  async findOne(id: string) {
+    /* return this.filmeRepository.findOneOrFail({
+      where: { id },
+      relations: ['generos', 'generos.genero', 'atores', 'atores.ator'],
+    }); */
+    const filme = await this.filmeRepository
+    .createQueryBuilder('filme')
+    .leftJoinAndSelect('filme.generos', 'generos')
+    .leftJoinAndSelect('generos.genero', 'genero')
+    .leftJoinAndSelect('filme.atores', 'atores')
+    .leftJoinAndSelect('atores.ator', 'ator')
+    .where('filme.id = :id', { id })
+    .getOneOrFail();
+
+    return filme;
   }
 
   update(id: string, updateFilmeDto: UpdateFilmeDto) {
