@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Diretor } from '../diretor/model/diretor.entity';
 import { Genero } from '../genero/model/genero.entity';
@@ -7,8 +7,6 @@ import { Ator } from '../elenco/ator/model/ator.entity';
 @Entity()
 export class Filme {
   
-  @IsNotEmpty()
-  @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
   
@@ -28,13 +26,19 @@ export class Filme {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @OneToMany(() => FilmeGenero, filmeGenero => filmeGenero.filme, { cascade: true })
+  @OneToMany(() => FilmeGenero, filmeGenero => filmeGenero.filme, { 
+    cascade: true,
+    orphanedRowAction: 'delete' //exclui os registros relacionados
+  })
   generos: FilmeGenero[];
 
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.filme, { cascade: true })
+  @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.filme, { 
+    cascade: true,
+    orphanedRowAction: 'delete'
+  })
   atores: FilmeAtor[];
 
   @IsNotEmpty()
@@ -49,10 +53,14 @@ export class FilmeGenero {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Filme, filme => filme.generos)
+  @ManyToOne(() => Filme, filme => filme.generos, {
+    onDelete: 'CASCADE' //quando o filme for deletado, remove-se da filme_ator
+  })
+  @JoinColumn({ name: 'filmeId' })
   filme: Filme;
 
   @ManyToOne(() => Genero, genero => genero.id)
+  @JoinColumn({ name: 'generoId' })
   genero: Genero;
 }
 
@@ -63,9 +71,13 @@ export class FilmeAtor {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Filme, filme => filme.atores)
+  @ManyToOne(() => Filme, filme => filme.atores, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'filmeId' })
   filme: Filme;
 
   @ManyToOne(() => Ator, ator => ator.id)
+  @JoinColumn({ name: 'atorId' })
   ator: Ator;
 }

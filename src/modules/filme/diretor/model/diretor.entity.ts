@@ -4,8 +4,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Diretor {
 
-  @IsNotEmpty()
-  @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

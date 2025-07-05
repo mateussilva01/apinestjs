@@ -4,9 +4,7 @@ import { FilmeAtor } from 'src/modules/filme/model/filme.entity';
 
 @Entity()
 export class Ator {
-  
-  @IsNotEmpty()
-  @IsUUID()
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
   
