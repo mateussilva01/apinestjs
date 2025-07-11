@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 import { Diretor } from '../diretor/model/diretor.entity';
 import { Genero } from '../genero/model/genero.entity';
 import { Ator } from '../elenco/ator/model/ator.entity';
@@ -44,6 +44,15 @@ export class Filme {
   @IsNotEmpty()
   @Column()
   sinopse: string;
+
+  @CreateDateColumn()
+  createdAt?: Date;
+
+  @UpdateDateColumn()
+  updatedAt?: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
 
 @Entity()
@@ -54,7 +63,7 @@ export class FilmeGenero {
   id: string;
 
   @ManyToOne(() => Filme, filme => filme.generos, {
-    onDelete: 'CASCADE' //quando o filme for deletado, remove-se da filme_ator
+    onDelete: 'CASCADE' //quando o filme for deletado, remove-se da filme_genero
   })
   @JoinColumn({ name: 'filmeId' })
   filme: Filme;

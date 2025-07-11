@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { FilmeAtor } from 'src/modules/filme/model/filme.entity';
 
 @Entity()
@@ -27,4 +27,13 @@ export class Ator {
 
   @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.ator)
   filmes: FilmeAtor[];
+
+  @CreateDateColumn()
+  createdAt?: Date;
+  
+  @UpdateDateColumn()
+  updatedAt?: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

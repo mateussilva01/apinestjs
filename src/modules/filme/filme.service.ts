@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateFilmeDto } from './model/dto/create-filme.dto';
 import { UpdateFilmeDto } from './model/dto/update-filme.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Filme, FilmeAtor, FilmeGenero } from './model/filme.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class FilmeService {
@@ -29,7 +29,7 @@ export class FilmeService {
     if (createFilmeDto.generos?.length) {
       for (const genero of createFilmeDto.generos) {
         if (!genero?.id) {
-          throw new BadRequestException('ID do gênero é obrigatório');
+          throw new BadRequestException('id do gênero é obrigatório');
         }
         await this.filmeGeneroRepository.save({
           filme: { id: filme.id },
@@ -40,7 +40,7 @@ export class FilmeService {
     if (createFilmeDto.atores?.length) {
       for (const ator of createFilmeDto.atores) {
         if (!ator?.id) {
-          throw new BadRequestException('ID do ator é obrigatório');
+          throw new BadRequestException('id do ator é obrigatório');
         }
         await this.filmeAtorRepository.save({
           filme: { id: filme.id },
@@ -52,7 +52,18 @@ export class FilmeService {
   }
 
   findAll() {
-    return this.filmeRepository.find()
+    return this.filmeRepository.find({
+      select: {
+        id: true,
+        titulo: true,
+        ano: true,
+        sinopse: true
+      }, 
+      order: {
+        updatedAt: 'DESC',
+        createdAt: 'DESC'
+      }
+    })
   }
 
   async findOne(id: string) {
@@ -62,13 +73,16 @@ export class FilmeService {
     }); */
     const filme = await this.filmeRepository
     .createQueryBuilder('filme')
+    .leftJoinAndSelect('filme.diretor', 'diretor')
     .leftJoinAndSelect('filme.generos', 'generos')
     .leftJoinAndSelect('generos.genero', 'genero')
     .leftJoinAndSelect('filme.atores', 'atores')
     .leftJoinAndSelect('atores.ator', 'ator')
     .where('filme.id = :id', { id })
-    .getOneOrFail();
-
+    .getOne();
+    if (!filme) {
+      throw new NotFoundException(`Filme com id ${id} não encontrado`);
+    }
     return filme;
   }
 
@@ -76,8 +90,11 @@ export class FilmeService {
     return this.filmeRepository.update(id, updateFilmeDto);
   }
 
-  remove(id: string) {
-    return this.filmeRepository.delete(id);
+  async remove(id: string) {
+    const filme = await this.filmeRepository.findOneBy({ id });
+    if (!filme)
+      throw new NotFoundException(`Filme com id ${id} não encontrado`);
+    return this.filmeRepository.softRemove(filme);
   }
 
 }

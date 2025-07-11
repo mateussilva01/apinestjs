@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateGeneroDto } from './model/dto/create-genero.dto';
 import { UpdateGeneroDto } from './model/dto/update-genero.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Genero } from './model/genero.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class GeneroService {
@@ -17,8 +17,14 @@ export class GeneroService {
     return this.generoRepository.save(createGeneroDto);
   }
 
-  findAll() {
-    return this.generoRepository.find();
+  async findAll() {
+    return await this.generoRepository.find({
+      select: ['id', 'nome', 'createdAt', 'updatedAt'],
+      order: {
+        updatedAt: 'DESC', 
+        createdAt: 'DESC'
+      }
+    });
   }
 
   findOne(id: string) {
@@ -29,8 +35,11 @@ export class GeneroService {
     return this.generoRepository.update(id, updateGeneroDto);
   }
 
-  remove(id: string) {
-    return this.generoRepository.delete(id);
+  async remove(id: string) {
+    const genero = await this.generoRepository.findOneBy({ id });
+    if (!genero)
+      throw new NotFoundException(`Gênero com id ${id} não encontrado`);
+    return this.generoRepository.softRemove(genero) 
   }
 
 }

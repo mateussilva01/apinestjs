@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAtorDto } from './model/dto/create-ator.dto';
@@ -14,24 +14,34 @@ export class AtorService {
   ) {}
 
   create(createAtorDto: CreateAtorDto) {
-    console.log(createAtorDto);
     return this.atorRepository.save(createAtorDto);
   }
 
-  findAll() {
-    return this.atorRepository.find();
+  async findAll() {
+    return await this.atorRepository
+    .createQueryBuilder('ator')
+    .select(['ator.id', 'ator.nome', 'ator.nascimento', 'ator.nacionalidade', 'ator.papel'])
+    .orderBy('ator.updatedAt', 'DESC')
+    .addOrderBy('ator.createdAt', 'DESC')
+    .getMany()
   }
 
   findOne(id: string) {
-    return this.atorRepository.findOneBy({ id });
+    const ator = this.atorRepository.findOneBy({ id });
+    if (!ator)
+      throw new NotFoundException(`Ator com id ${id} não encontrado`);
+    return ator;
   }
 
   update(id: string, updateAtorDto: UpdateAtorDto) {
     return this.atorRepository.update(id, updateAtorDto);
   }
 
-  remove(id: string) {
-    return this.atorRepository.delete(id);
+  async remove(id: string) {
+    const ator = await this.atorRepository.findOneBy({ id });
+    if (!ator)
+      throw new NotFoundException(`Ator com id ${id} não encontrado`);
+    return this.atorRepository.softRemove(ator); 
   }
 
 }

@@ -4,5 +4,4 @@ export class CreateGeneroDto {
   @IsString()
   @IsNotEmpty()
   nome: string;
-  criadoPor?: string;
 }

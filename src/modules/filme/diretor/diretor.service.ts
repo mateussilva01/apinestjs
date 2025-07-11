@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Diretor } from './model/diretor.entity';
 import { CreateDiretorDto } from './model/dto/create-diretor.dto';
 import { UpdateDiretorDto } from './model/dto/update-diretor.dto';
+import { Diretor } from './model/diretor.entity';
 
 @Injectable()
 export class DiretorService {
@@ -17,19 +17,31 @@ export class DiretorService {
   }
 
   findAll() {
-    return this.diretorRepository.find();
+    return this.diretorRepository.find({ 
+      order: { 
+        updatedAt: 'DESC',
+        createdAt: 'DESC'
+      } 
+    });
   }
 
-  findOne(id: string) {
-    return this.diretorRepository.findOneBy({ id });
+  async findOne(id: string) {
+    const diretor = await this.diretorRepository.findOneBy({ id });
+    if (!diretor)
+      throw new NotFoundException(`Diretor com id ${id} não encontrado`)
+    return diretor;
   }
   
   update(id: string, updateDiretorDto: UpdateDiretorDto) {
     return this.diretorRepository.update(id, updateDiretorDto);
   }
 
-  remove(id: string) {
-    return this.diretorRepository.delete(id);
+  async remove(id: string) {
+    const diretor = await this.diretorRepository.findOneBy({ id });
+    if (!diretor)
+      throw new NotFoundException(`Diretor com id ${id} não encontrado`);
+    this.diretorRepository.softRemove(diretor);
+    return { message: `Diretor com id ${id} removido` }
   }
 
 }
