@@ -1,7 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { Email } from 'src/common/decorators/email.decorator';
-import { Senha } from 'src/common/decorators/senha.decorator';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service'
+import { CreateUsuarioDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller()
 export class AuthController {
@@ -9,13 +9,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/cadastrar')
-  cadastrar(@Body('nome') nome: string, @Email() email: string, @Senha() senha: string) {
-    return this.authService.cadastrar(nome, email, senha);
+  cadastrar(@Body() createUsuarioDto: CreateUsuarioDto) {
+    return this.authService.cadastrar(createUsuarioDto);
   }
 
   @Post('/login')
-  login(@Email() email: string, @Senha() senha: string) {
-    return this.authService.login(email, senha);
+  login(@Body() login: LoginDto, @Res({ passthrough: true }) response: Response) {
+    return this.authService.login(login);
   }
 
 }
