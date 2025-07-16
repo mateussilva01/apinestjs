@@ -40,6 +40,7 @@ export class UsuarioService {
       if (usuarioEmail && usuarioEmail.id !== id)
         throw new BadRequestException('E-mail já está em uso');
     }
+    console.log(usuarioEmail, usuarioEmail.id);
     const hashedPassword = await hashingPassword(senha);
     const novoUsuario = await this.usuarioRepository.update(id, {
       nome,

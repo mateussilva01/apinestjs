@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { FilmeAtor } from 'src/modules/filme/model/filme.entity';
+import { FilmeAtor } from 'src/modules/producao/filme/model/filme.entity';
 
 @Entity()
 export class Ator {

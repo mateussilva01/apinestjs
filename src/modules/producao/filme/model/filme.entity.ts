@@ -1,8 +1,8 @@
 import { IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
-import { Diretor } from '../diretor/model/diretor.entity';
-import { Genero } from '../genero/model/genero.entity';
-import { Ator } from '../elenco/ator/model/ator.entity';
+import { Diretor } from '../../diretor/model/diretor.entity';
+import { Genero } from '../../genero/model/genero.entity';
+import { Ator } from '../../elenco/model/ator.entity';
 
 @Entity()
 export class Filme {
