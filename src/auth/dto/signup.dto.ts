@@ -1,6 +1,8 @@
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsNumber, IsString, Length } from 'class-validator';
 
 export class CreateUsuarioDto {
+  status: number;
+
   @IsString()
   @Length(3, 32)
   nome: string;
@@ -13,4 +15,9 @@ export class CreateUsuarioDto {
   @IsString()
   @Length(8, 255)
   senha: string;
+}
+
+export enum CreateUsuarioDtoStatus {
+  ativo = 1,
+  desativado = 2
 }

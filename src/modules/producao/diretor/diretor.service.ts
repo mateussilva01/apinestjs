@@ -17,11 +17,11 @@ export class DiretorService {
   }
 
   findAll() {
-    return this.diretorRepository.find({ 
-      order: { 
-        updatedAt: 'DESC',
-        createdAt: 'DESC'
-      } 
+    return this.diretorRepository.find({
+      order: {
+        atualizacao: 'DESC',
+        insercao: 'DESC'
+      }
     });
   }
 
@@ -31,7 +31,7 @@ export class DiretorService {
       throw new NotFoundException(`Diretor com id ${id} não encontrado`)
     return diretor;
   }
-  
+
   update(id: string, updateDiretorDto: UpdateDiretorDto) {
     return this.diretorRepository.update(id, updateDiretorDto);
   }

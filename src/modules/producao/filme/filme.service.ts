@@ -20,7 +20,8 @@ export class FilmeService {
     if (!createFilmeDto) {
       throw new BadRequestException('Informações inválidas')
     }
-    const filme = await this.filmeRepository.save({
+    const filme = await this.filmeRepository.create({
+      status: createFilmeDto.status,
       titulo: createFilmeDto.titulo,
       ano: createFilmeDto.ano,
       sinopse: createFilmeDto.sinopse,
@@ -31,7 +32,7 @@ export class FilmeService {
         if (!genero?.id) {
           throw new BadRequestException('id do gênero é obrigatório');
         }
-        await this.filmeGeneroRepository.save({
+        await this.filmeGeneroRepository.create({
           filme: { id: filme.id },
           genero: { id: genero.id }
         });
@@ -42,13 +43,13 @@ export class FilmeService {
         if (!ator?.id) {
           throw new BadRequestException('id do ator é obrigatório');
         }
-        await this.filmeAtorRepository.save({
+        await this.filmeAtorRepository.create({
           filme: { id: filme.id },
           ator: { id: ator.id }
         });
       }
     }
-    return filme;
+    return this.filmeRepository.save(createFilmeDto);
   }
 
   findAll() {
@@ -58,10 +59,10 @@ export class FilmeService {
         titulo: true,
         ano: true,
         sinopse: true
-      }, 
+      },
       order: {
-        updatedAt: 'DESC',
-        createdAt: 'DESC'
+        atualizacao: 'DESC',
+        insercao: 'DESC'
       }
     })
   }

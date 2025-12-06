@@ -1,18 +1,29 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity()
+@Entity('credencial.usuario')
 export class Usuario {
-
-  @IsNotEmpty()
   @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @CreateDateColumn()
+  insercao?: Date;
+
+  @UpdateDateColumn()
+  atualizacao?: Date;
+
+  @DeleteDateColumn()
+  remocao?: Date;
+
+  @IsNotEmpty()
+  @Column()
+  status: number;
+
   @IsNotEmpty()
   @Column()
   nome: string;
-  
+
   @IsNotEmpty()
   @Column()
   email: string;
@@ -20,13 +31,4 @@ export class Usuario {
   @IsNotEmpty()
   @Column()
   senha: string;
-
-  @CreateDateColumn()
-  createdAt?: Date;
-  
-  @UpdateDateColumn()
-  updatedAt?: Date;
-
-  @DeleteDateColumn()
-  deletedAt?: Date;
 }

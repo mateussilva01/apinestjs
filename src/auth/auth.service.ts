@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { hashingPassword, verificarSenha } from './helpers/password.helper';
-import { CreateUsuarioDto } from './dto/signup.dto';
+import { CreateUsuarioDto, CreateUsuarioDtoStatus } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { Usuario } from 'src/modules/credencial/usuario/model/usuario.entity';
 
@@ -17,18 +17,23 @@ export class AuthService {
   ) {}
 
   async cadastrar(createUsuarioDto: CreateUsuarioDto) {
-    const { nome, email, senha } = createUsuarioDto;
-    const hashedPassword = await hashingPassword(senha);
-    const usuario = await this.repository.findOne({ where: { email } });
-    if (usuario)
-      throw new BadRequestException(`Usuário já existe`);
-    const novoUsuario = this.repository.create({
-      nome,
-      email,
-      senha: hashedPassword
-    });
-    await this.repository.save(novoUsuario);
-    return { message: `Usuário '${novoUsuario.nome}' registrado com sucesso` };
+    try {
+      const { nome, email, senha } = createUsuarioDto;
+      const hashedPassword = await hashingPassword(senha);
+      const usuario = await this.repository.findOne({ where: { email } });
+      if (usuario)
+        throw new BadRequestException(`Usuário já existe`);
+      const novoUsuario = this.repository.create({
+        status: CreateUsuarioDtoStatus.ativo,
+        nome,
+        email,
+        senha: hashedPassword
+      });
+      await this.repository.save(novoUsuario);
+      return { message: `Usuário '${novoUsuario.nome}' registrado com sucesso` };
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async login(data: LoginDto) {

@@ -3,18 +3,23 @@ import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class
 import { Diretor } from 'src/modules/producao/diretor/model/diretor.entity';
 import { Ator } from 'src/modules/producao/elenco/model/ator.entity';
 import { Genero } from 'src/modules/producao/genero/model/genero.entity';
+import { JoinColumn } from 'typeorm';
 
 export class CreateFilmeDto {
+  @IsOptional()
+  status = CreateFilmeDtoStatus.ativo;
+
   @IsString()
   @IsNotEmpty()
   titulo: string;
-  
+
   @IsNotEmpty()
   ano: Date;
 
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => Diretor)
+  @JoinColumn({ name: 'diretorid' })
   diretor: Diretor;
 
   @IsOptional()
@@ -32,4 +37,9 @@ export class CreateFilmeDto {
   @IsString()
   @IsNotEmpty()
   sinopse: string;
+}
+
+export enum CreateFilmeDtoStatus {
+  ativo = 1,
+  desativado = 2
 }

@@ -19,10 +19,10 @@ export class GeneroService {
 
   async findAll() {
     return await this.generoRepository.find({
-      select: ['id', 'nome', 'createdAt', 'updatedAt'],
+      select: ['id', 'nome', 'atualizacao', 'insercao'],
       order: {
-        updatedAt: 'DESC', 
-        createdAt: 'DESC'
+        atualizacao: 'DESC',
+        insercao: 'DESC'
       }
     });
   }
@@ -39,7 +39,7 @@ export class GeneroService {
     const genero = await this.generoRepository.findOneBy({ id });
     if (!genero)
       throw new NotFoundException(`Gênero com id ${id} não encontrado`);
-    return this.generoRepository.softRemove(genero) 
+    return this.generoRepository.softRemove(genero)
   }
 
 }

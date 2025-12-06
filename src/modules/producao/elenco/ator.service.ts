@@ -10,7 +10,7 @@ export class AtorService {
 
   constructor(
     @InjectRepository(Ator)
-    private atorRepository: Repository<Ator>  
+    private atorRepository: Repository<Ator>
   ) {}
 
   create(createAtorDto: CreateAtorDto) {
@@ -21,8 +21,8 @@ export class AtorService {
     return await this.atorRepository
     .createQueryBuilder('ator')
     .select(['ator.id', 'ator.nome', 'ator.nascimento', 'ator.nacionalidade', 'ator.papel'])
-    .orderBy('ator.updatedAt', 'DESC')
-    .addOrderBy('ator.createdAt', 'DESC')
+    .orderBy('ator.atualizacao', 'DESC')
+    .addOrderBy('ator.insercao', 'DESC')
     .getMany()
   }
 
@@ -41,7 +41,7 @@ export class AtorService {
     const ator = await this.atorRepository.findOneBy({ id });
     if (!ator)
       throw new NotFoundException(`Ator com id ${id} não encontrado`);
-    return this.atorRepository.softRemove(ator); 
+    return this.atorRepository.softRemove(ator);
   }
 
 }

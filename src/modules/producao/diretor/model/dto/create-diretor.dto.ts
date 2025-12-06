@@ -1,6 +1,9 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDiretorDto {
+  @IsOptional()
+  status = CreateDiretorDtoStatus.ativo;
+
   @IsString()
   @IsNotEmpty()
   nome: string;
@@ -12,4 +15,9 @@ export class CreateDiretorDto {
   @IsString()
   @IsNotEmpty()
   nacionalidade: string;
+}
+
+export enum CreateDiretorDtoStatus {
+  ativo = 1,
+  desativado = 2
 }

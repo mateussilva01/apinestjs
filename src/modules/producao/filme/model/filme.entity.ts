@@ -1,15 +1,28 @@
-import { IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 import { Diretor } from '../../diretor/model/diretor.entity';
 import { Genero } from '../../genero/model/genero.entity';
 import { Ator } from '../../elenco/model/ator.entity';
 
-@Entity()
+@Entity('producao.filme')
 export class Filme {
-  
+  @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  
+
+  @CreateDateColumn()
+  insercao?: Date;
+
+  @UpdateDateColumn()
+  atualizacao?: Date;
+
+  @DeleteDateColumn()
+  remocao?: Date;
+
+  @IsNotEmpty()
+  @Column()
+  status: number;
+
   @IsNotEmpty()
   @Column()
   titulo: string;
@@ -19,14 +32,14 @@ export class Filme {
   ano: Date;
 
   @IsNotEmpty()
-  @ManyToOne(() => Diretor, { cascade: true })
-  @JoinColumn()
+  @ManyToOne(() => Diretor)
+  @JoinColumn({ name: 'diretorid' })
   diretor: Diretor;
 
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @OneToMany(() => FilmeGenero, filmeGenero => filmeGenero.filme, { 
+  @OneToMany(() => FilmeGenero, filmeGenero => filmeGenero.filme, {
     cascade: true,
     orphanedRowAction: 'delete' //exclui os registros relacionados
   })
@@ -35,7 +48,7 @@ export class Filme {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.filme, { 
+  @OneToMany(() => FilmeAtor, filmeAtor => filmeAtor.filme, {
     cascade: true,
     orphanedRowAction: 'delete'
   })
@@ -44,18 +57,9 @@ export class Filme {
   @IsNotEmpty()
   @Column()
   sinopse: string;
-
-  @CreateDateColumn()
-  createdAt?: Date;
-
-  @UpdateDateColumn()
-  updatedAt?: Date;
-
-  @DeleteDateColumn()
-  deletedAt?: Date;
 }
 
-@Entity()
+@Entity('producao.filme_genero')
 @Unique(['filme', 'genero'])
 export class FilmeGenero {
 
@@ -73,7 +77,7 @@ export class FilmeGenero {
   genero: Genero;
 }
 
-@Entity()
+@Entity('producao.filme_ator')
 @Unique(['filme', 'ator'])
 export class FilmeAtor {
 
