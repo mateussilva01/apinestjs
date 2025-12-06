@@ -1,28 +1,12 @@
-import { IsArray, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { IsArray, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Diretor } from '../../diretor/model/diretor.entity';
 import { Genero } from '../../genero/model/genero.entity';
 import { Ator } from '../../elenco/model/ator.entity';
+import { EntidadeBase } from 'src/common/entidade_base/entidade-base';
 
 @Entity('producao.filme')
-export class Filme {
-  @IsUUID()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @CreateDateColumn()
-  insercao?: Date;
-
-  @UpdateDateColumn()
-  atualizacao?: Date;
-
-  @DeleteDateColumn()
-  remocao?: Date;
-
-  @IsNotEmpty()
-  @Column()
-  status: number;
-
+export class Filme extends EntidadeBase {
   @IsNotEmpty()
   @Column()
   titulo: string;
